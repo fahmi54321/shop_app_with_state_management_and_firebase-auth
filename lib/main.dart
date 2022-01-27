@@ -10,6 +10,7 @@ import './screens/orders_screen.dart';
 import './screens/user_product_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
+import './providers/auth_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value( //todo 2 (next auth_screen)
+          value: AuthProvider(),
+        ),
         ChangeNotifierProvider.value(
           value: ProductProvider(),
         ),
@@ -33,7 +37,8 @@ class MyApp extends StatelessWidget {
           value: OrderProvider(),
         ),
       ],
-      child: MaterialApp( //
+      child: MaterialApp(
+        //
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.purple,
@@ -47,9 +52,9 @@ class MyApp extends StatelessWidget {
         routes: {
           ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
-          OrderScreen.routeName : (ctx) => OrderScreen(),
-          UserProductScreen.routeName : (ctx) => UserProductScreen(),
-          EditProductScreen.routeName : (ctx) => EditProductScreen(),
+          OrderScreen.routeName: (ctx) => OrderScreen(),
+          UserProductScreen.routeName: (ctx) => UserProductScreen(),
+          EditProductScreen.routeName: (ctx) => EditProductScreen(),
         },
       ),
     );
