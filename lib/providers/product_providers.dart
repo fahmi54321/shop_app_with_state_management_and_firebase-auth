@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 class ProductProvider with ChangeNotifier {
   List<Product> itemProducts = [];
 
-  final String authToken; //todo 2
+  final String authToken;
 
   ProductProvider({
-    required this.authToken, //todo 3
-    required this.itemProducts, //todo 4 (next main)
+    required this.authToken,
+    required this.itemProducts,
   });
 
   List<Product> get favoritesItems {
@@ -27,7 +27,7 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async{
-    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken'; //todo 1
+    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken';
 
     try{
         final response = await http.get(Uri.parse(url));
@@ -62,7 +62,7 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    const url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json';
+    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken'; //todo 1
 
     try {
       final response = await http.post(
@@ -98,7 +98,7 @@ class ProductProvider with ChangeNotifier {
     final prodIndex = itemProducts.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
 
-      final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products/$id.json';
+      final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken'; //todo 2
       await http.patch(Uri.parse(url),body : json.encode({
         'title' : newProduct.title,
         'description' : newProduct.description,
@@ -111,9 +111,8 @@ class ProductProvider with ChangeNotifier {
     } else {}
   }
 
-  //todo 1 (next user_product_item_widget)
   Future<void> deleteProduct(String id) async {
-    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products/$id.json';
+    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken'; //todo 3 (finish)
 
     final existingProductIndex = itemProducts.indexWhere((element) => element.id == id);
     final existingProduct = itemProducts[existingProductIndex];
