@@ -39,7 +39,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  OrderButton(cart: cart), //todo 2
+                  OrderButton(cart: cart),
                 ],
               ),
             ),
@@ -65,7 +65,6 @@ class CartScreen extends StatelessWidget {
   }
 }
 
-//todo 3
 class OrderButton extends StatefulWidget {
   const OrderButton({
     Key? key,
@@ -79,11 +78,11 @@ class OrderButton extends StatefulWidget {
 }
 
 class _OrderButtonState extends State<OrderButton> {
-  var _isLoading = false; //todo 4
+  var _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton( //todo 5 (finish)
+    return FlatButton(
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading == true)
           ? null
           : () async {
