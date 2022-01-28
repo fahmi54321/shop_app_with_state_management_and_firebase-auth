@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../screens/product_details_screen.dart';
 import '../providers/product.dart';
 import '../providers/cart_providers.dart';
+import '../providers/auth_provider.dart';
 
 class ProductItem extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _ProductItemState extends State<ProductItem> {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<CartProvider>(context, listen: false);
+    final auth = Provider.of<AuthProvider>(context,listen: false); //todo 3
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(
@@ -48,7 +50,7 @@ class _ProductItemState extends State<ProductItem> {
             ),
             onPressed: () {
               setState(() {
-                product.toggleFavoriteStatus();
+                product.toggleFavoriteStatus(auth.token??''); //todo 4 (finish)
               });
             },
             color: Theme.of(context).accentColor,
@@ -62,7 +64,6 @@ class _ProductItemState extends State<ProductItem> {
                 product.title,
               );
 
-              //todo 1 (next cart_providers)
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
