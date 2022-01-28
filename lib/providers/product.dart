@@ -20,13 +20,11 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  //todo 1
   void _setFavValue(bool newValue){
     isFavorite = newValue;
     notifyListeners();
   }
 
-  // todo 2 (finish)
   Future<void> toggleFavoriteStatus() async {
     final oldStatus = isFavorite;
 
