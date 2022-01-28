@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value( //todo 2 (next auth_screen)
+        ChangeNotifierProvider.value(
           value: AuthProvider(),
         ),
         ChangeNotifierProvider.value(
@@ -37,25 +37,27 @@ class MyApp extends StatelessWidget {
           value: OrderProvider(),
         ),
       ],
-      child: MaterialApp(
-        //
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
-          primaryTextTheme: TextTheme(
-            caption: TextStyle(color: Colors.white),
+      //todo 5
+      child: Consumer<AuthProvider>(
+        builder: (ctx, auth, _,) => MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+            primaryTextTheme: TextTheme(
+              caption: TextStyle(color: Colors.white),
+            ),
           ),
+          home: auth.isAuth==true ? ProductOverviewScreens() : AuthScreen(), //todo 6 (finish)
+          routes: {
+            ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
+            CartScreen.routeName: (ctx) => CartScreen(),
+            OrderScreen.routeName: (ctx) => OrderScreen(),
+            UserProductScreen.routeName: (ctx) => UserProductScreen(),
+            EditProductScreen.routeName: (ctx) => EditProductScreen(),
+          },
         ),
-        home: AuthScreen(),
-        routes: {
-          ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
-          CartScreen.routeName: (ctx) => CartScreen(),
-          OrderScreen.routeName: (ctx) => OrderScreen(),
-          UserProductScreen.routeName: (ctx) => UserProductScreen(),
-          EditProductScreen.routeName: (ctx) => EditProductScreen(),
-        },
       ),
     );
   }
