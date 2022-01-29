@@ -50,7 +50,7 @@ class _ProductItemState extends State<ProductItem> {
             ),
             onPressed: () {
               setState(() {
-                product.toggleFavoriteStatus(auth.token??''); //todo 4 (finish)
+                product.toggleFavoriteStatus(auth.token??'',auth.userId); //todo 4 (next auth_provider)
               });
             },
             color: Theme.of(context).accentColor,

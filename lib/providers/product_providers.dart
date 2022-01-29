@@ -8,9 +8,11 @@ class ProductProvider with ChangeNotifier {
   List<Product> itemProducts = [];
 
   final String authToken;
+  final String userId;
 
   ProductProvider({
     required this.authToken,
+    required this.userId,
     required this.itemProducts,
   });
 
@@ -27,11 +29,15 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async{
-    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken';
+    var url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken';
 
     try{
         final response = await http.get(Uri.parse(url));
         final extractedData = jsonDecode(response.body) as Map<String,dynamic>;
+
+        url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/usersFavorites/$userId.json?auth=$authToken'; //todo 6
+        final favoriteResponse = await http.get(Uri.parse(url)); //todo 7
+        final favoriteData = json.decode(favoriteResponse.body); //todo 8
 
         final List<Product> _loadedProduct = [];
 
@@ -47,7 +53,7 @@ class ProductProvider with ChangeNotifier {
             description: value['description'],
             price: value['price'],
             imageUrl: value['imageUrl'],
-            isFavorite: value['isFavorite'],
+            isFavorite: favoriteData == null ? false : favoriteData[key]??false, //todo 9 finish (jadi get favorite sesuai dengan usernya)
           ),
         );
       });
@@ -72,8 +78,7 @@ class ProductProvider with ChangeNotifier {
             'title': product.title,
             'description': product.description,
             'imageUrl': product.imageUrl,
-            'price': product.price,
-            'isFavorite': product.isFavorite,
+            'price': product.price, //todo 6 (remove isFavorite)
           },
         ),
       );

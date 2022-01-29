@@ -6,18 +6,19 @@ import '../utils/http_exception.dart';
 
 class AuthProvider with ChangeNotifier {
 
-  //todo 1
   String? _token;
   DateTime? _expiryDate;
   String? _userId;
 
 
-  //todo 4 (next main)
   bool get isAuth{
     return token != null;
   }
 
-  //todo 3
+  String get userId{ //todo 5 (next product_providers)
+    return _userId??'';
+  }
+
   String? get token{
     if(_expiryDate != null && _expiryDate!.isAfter(DateTime.now()) && _token!= null){
       return _token??'';
@@ -50,7 +51,6 @@ class AuthProvider with ChangeNotifier {
         throw HttpException(message: responseData['error']['message']);
       }
 
-      //todo 2
       _token = responseData['idToken'];
       _userId = responseData['localId'];
       _expiryDate = DateTime.now().add(
