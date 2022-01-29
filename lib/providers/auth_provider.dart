@@ -15,7 +15,7 @@ class AuthProvider with ChangeNotifier {
     return token != null;
   }
 
-  String get userId{ //todo 5 (next product_providers)
+  String get userId{
     return _userId??'';
   }
 
@@ -80,5 +80,13 @@ class AuthProvider with ChangeNotifier {
       password: password,
       segmentUrl: 'signInWithPassword',
     );
+  }
+
+  //todo 1 (next app_drawer)
+  void logout(){
+    _token = null;
+    _userId = null;
+    _expiryDate = null;
+    notifyListeners();
   }
 }
