@@ -28,14 +28,17 @@ class ProductProvider with ChangeNotifier {
     return itemProducts.firstWhere((element) => element.id == id);
   }
 
-  Future<void> fetchAndSetProducts() async{
-    var url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken';
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async{ //todo 1
+
+    var filterString = filterByUser==true ? 'orderBy="creatorId"&equalTo="$userId"' : ''; //todo 2
+
+    var url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString'; //todo 3
 
     try{
         final response = await http.get(Uri.parse(url));
         final extractedData = jsonDecode(response.body) as Map<String,dynamic>;
 
-        url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/usersFavorites/$userId.json?auth=$authToken'; //todo 6
+        url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/usersFavorites/$userId.json?auth=$authToken';
         final favoriteResponse = await http.get(Uri.parse(url));
         final favoriteData = json.decode(favoriteResponse.body);
 
@@ -79,7 +82,7 @@ class ProductProvider with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            'creatorId' : userId, //todo 1 (finish)
+            'creatorId' : userId,
           },
         ),
       );
@@ -140,3 +143,17 @@ class ProductProvider with ChangeNotifier {
     existingProduct == null; // tidak error maka item di aplikasi sudah null
   }
 }
+
+//todo 4 (next user_product_screen)
+
+/*
+{
+  "rules": {
+    ".read": "auth!= null", // 2022-2-23
+    ".write": "auth!= null", // 2022-2-23
+    "products":{
+    ".indexOn" : ["creatorId"]
+    }
+  }
+}
+*/

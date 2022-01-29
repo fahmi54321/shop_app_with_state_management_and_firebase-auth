@@ -6,20 +6,17 @@ import '../widget/app_drawer.dart';
 import '../screens/edit_product_screen.dart';
 
 class UserProductScreen extends StatelessWidget {
-
   static const routeName = '/user-products';
 
-  //todo 1
   Future<void> _refreshProducts(BuildContext context) async {
     await Provider.of<ProductProvider>(
       context,
       listen: false,
-    ).fetchAndSetProducts();
+    ).fetchAndSetProducts(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final productData = Provider.of<ProductProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,24 +31,32 @@ class UserProductScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: RefreshIndicator( //todo 2
-        onRefresh: () => _refreshProducts(context), //todo 3 (finish)
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: ListView.builder(
-            itemBuilder: (_, i) => Column(
-              children: [
-                UserProductItem(
-                  productData.items[i].id, //todo 4 (next edit_product_screen)
-                  productData.items[i].title,
-                  productData.items[i].imageUrl,
-                ),
-                Divider(),
-              ],
-            ),
-            itemCount: productData.items.length,
-          ),
-        ),
+      body: FutureBuilder( //todo 5
+        future: _refreshProducts(context),
+        builder: (ctx, dataSnapshot) =>
+            dataSnapshot.connectionState == ConnectionState.waiting
+                ? Center(child: CircularProgressIndicator())
+                : RefreshIndicator(
+                    onRefresh: () => _refreshProducts(context),
+                    child: Consumer<ProductProvider>( //todo 6 (finish)
+                      builder:(ctx,productData,_)=> Padding(
+                        padding: EdgeInsets.all(8),
+                        child: ListView.builder(
+                          itemBuilder: (_, i) => Column(
+                            children: [
+                              UserProductItem(
+                                productData.items[i].id,
+                                productData.items[i].title,
+                                productData.items[i].imageUrl,
+                              ),
+                              Divider(),
+                            ],
+                          ),
+                          itemCount: productData.items.length,
+                        ),
+                      ),
+                    ),
+                  ),
       ),
     );
   }
