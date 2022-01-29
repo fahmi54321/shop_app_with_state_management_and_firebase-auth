@@ -36,8 +36,8 @@ class ProductProvider with ChangeNotifier {
         final extractedData = jsonDecode(response.body) as Map<String,dynamic>;
 
         url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/usersFavorites/$userId.json?auth=$authToken'; //todo 6
-        final favoriteResponse = await http.get(Uri.parse(url)); //todo 7
-        final favoriteData = json.decode(favoriteResponse.body); //todo 8
+        final favoriteResponse = await http.get(Uri.parse(url));
+        final favoriteData = json.decode(favoriteResponse.body);
 
         final List<Product> _loadedProduct = [];
 
@@ -53,7 +53,7 @@ class ProductProvider with ChangeNotifier {
             description: value['description'],
             price: value['price'],
             imageUrl: value['imageUrl'],
-            isFavorite: favoriteData == null ? false : favoriteData[key]??false, //todo 9 finish (jadi get favorite sesuai dengan usernya)
+            isFavorite: favoriteData == null ? false : favoriteData[key]??false,
           ),
         );
       });
@@ -68,7 +68,7 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken'; //todo 1
+    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products.json?auth=$authToken';
 
     try {
       final response = await http.post(
@@ -78,7 +78,8 @@ class ProductProvider with ChangeNotifier {
             'title': product.title,
             'description': product.description,
             'imageUrl': product.imageUrl,
-            'price': product.price, //todo 6 (remove isFavorite)
+            'price': product.price,
+            'creatorId' : userId, //todo 1 (finish)
           },
         ),
       );
@@ -103,7 +104,7 @@ class ProductProvider with ChangeNotifier {
     final prodIndex = itemProducts.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
 
-      final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken'; //todo 2
+      final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken';
       await http.patch(Uri.parse(url),body : json.encode({
         'title' : newProduct.title,
         'description' : newProduct.description,
@@ -117,7 +118,7 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken'; //todo 3 (finish)
+    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken';
 
     final existingProductIndex = itemProducts.indexWhere((element) => element.id == id);
     final existingProduct = itemProducts[existingProductIndex];
