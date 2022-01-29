@@ -44,12 +44,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: CartProvider(),
         ),
-        ChangeNotifierProxyProvider<AuthProvider, OrderProvider>( //todo 5 (finish)
+        ChangeNotifierProxyProvider<AuthProvider, OrderProvider>(
           update: (ctx, auth, previousOrderProvider) => OrderProvider(
             authToken: auth.token ?? '',
+            userId: auth.userId, //todo 5
           ),
           create: (ctx) => OrderProvider(
             authToken: '',
+            userId: '', //todo 6 finish
           ),
         ),
       ],

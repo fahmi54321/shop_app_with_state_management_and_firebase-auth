@@ -25,11 +25,12 @@ class OrderProvider with ChangeNotifier {
     return [..._orders];
   }
 
-  final String authToken; //todo 1
-  OrderProvider({required this.authToken}); //todo 2
+  final String authToken;
+  final String userId; //todo 1
+  OrderProvider({required this.authToken,required this.userId,}); //todo 2
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/orders.json?auth=$authToken'; //todo 3
+    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken'; //todo 3
     final response = await http.post(Uri.parse(url),
         body: json.encode({
           'amount': total,
@@ -59,7 +60,7 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrders() async {
-    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/orders.json?auth=$authToken'; //todo 4 (next main)
+    final url = 'https://firstflutter-e43f3-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken'; //todo 4 (next main)
     final response = await http.get(Uri.parse(url));
     List<OrderItem> _loadedOrders = [];
     var extractedData = jsonDecode(response.body) as Map<String, dynamic>;
