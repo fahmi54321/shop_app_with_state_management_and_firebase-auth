@@ -43,6 +43,7 @@ class _OrderScreenState extends State<OrderScreen> {
             return Center(child: CircularProgressIndicator());
           } else {
             if (dataSnapshot.error != null) {
+              print(dataSnapshot.error);
               return Center(
                 child: Text('An error occurred'),
               );

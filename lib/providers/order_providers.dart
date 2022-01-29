@@ -66,6 +66,7 @@ class OrderProvider with ChangeNotifier {
     var extractedData = jsonDecode(response.body) as Map<String, dynamic>;
 
     if(extractedData == null){
+      print('response ${response.body}');
       return;
     }
 
@@ -80,6 +81,8 @@ class OrderProvider with ChangeNotifier {
               price: element['price'],),).toList(),
         dateTime: DateTime.parse(value['dateTime'],),));
     });
+
+    print('response ${response.body}');
 
     _orders = _loadedOrders;
     notifyListeners();
