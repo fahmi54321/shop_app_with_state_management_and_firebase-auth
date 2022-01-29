@@ -43,13 +43,13 @@ class AppDrawer extends StatelessWidget {
             },
           ),
 
-          //todo 2 finish
           Divider(),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
             onTap: (){
               Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/'); //todo 2 (finish)
               Provider.of<AuthProvider>(context,listen: false,).logout();
             },
           ),

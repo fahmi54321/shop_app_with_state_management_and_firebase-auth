@@ -167,6 +167,7 @@ class _AuthCardState extends State<AuthCard> {
 
     }catch(error){ //todo 4 (finish)
       var errorMessage = 'Could not authenticate you. Please try again later.';
+      print(error);
       _showErrorDialog(errorMessage);
     }
 

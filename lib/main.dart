@@ -73,11 +73,11 @@ class MyApp extends StatelessWidget {
             ),
           ),
           home: auth.isAuth == true
-              ? ProductOverviewScreens() //todo 5
+              ? ProductOverviewScreens()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapshot) =>
-                      authResultSnapshot.connectionState == //todo 6 (finish)
+                      authResultSnapshot.connectionState ==
                               ConnectionState.waiting
                           ? SplashScreen()
                           : AuthScreen(),

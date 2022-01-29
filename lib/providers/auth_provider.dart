@@ -67,23 +67,22 @@ class AuthProvider with ChangeNotifier {
       _autoLogout();
       notifyListeners();
 
-      final prefs = await SharedPreferences.getInstance(); //todo 1
-      final userData = json.encode( //todo 2
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode(
         {
           'token': _token,
           'userId': _userId,
-          'expiryDate': _expiryDate,
+          'expiryDate': _expiryDate?.toIso8601String(),
         },
       );
 
-      prefs.setString('userData', userData); //todo 3
+      prefs.setString('userData', userData);
 
     } catch (error) {
       throw error;
     }
   }
 
-  //todo 4 (next main)
   Future<bool> tryAutoLogin() async{
     final prefs = await SharedPreferences.getInstance();
     if(!prefs.containsKey('userData')){
@@ -120,7 +119,7 @@ class AuthProvider with ChangeNotifier {
     );
   }
 
-  void logout(){
+  Future<void> logout() async{
     _token = null;
     _userId = null;
     _expiryDate = null;
@@ -131,9 +130,13 @@ class AuthProvider with ChangeNotifier {
     }
 
     notifyListeners();
+
+    //todo 1 (next app_drawer)
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+
   }
 
-  //todo 2
   void _autoLogout() {
 
     if(_authTimer !=null){
