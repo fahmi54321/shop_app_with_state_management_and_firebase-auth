@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './screens/splash_screen.dart';
 import './screens/produk_overview_screens.dart';
 import './screens/product_details_screen.dart';
 import './screens/cart_screen.dart';
@@ -47,16 +48,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, OrderProvider>(
           update: (ctx, auth, previousOrderProvider) => OrderProvider(
             authToken: auth.token ?? '',
-            userId: auth.userId, //todo 5
+            userId: auth.userId,
           ),
           create: (ctx) => OrderProvider(
             authToken: '',
-            userId: '', //todo 6 finish
+            userId: '',
           ),
         ),
       ],
       child: Consumer<AuthProvider>(
-        builder: (ctx, auth, _,) => MaterialApp(
+        builder: (
+          ctx,
+          auth,
+          _,
+        ) =>
+            MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.purple,
@@ -66,7 +72,16 @@ class MyApp extends StatelessWidget {
               caption: TextStyle(color: Colors.white),
             ),
           ),
-          home: auth.isAuth==true ? ProductOverviewScreens() : AuthScreen(),
+          home: auth.isAuth == true
+              ? ProductOverviewScreens() //todo 5
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResultSnapshot) =>
+                      authResultSnapshot.connectionState == //todo 6 (finish)
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
           routes: {
             ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
             CartScreen.routeName: (ctx) => CartScreen(),
